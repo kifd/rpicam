@@ -1,0 +1,26 @@
+# copy to:        /etc/systemd/system/camera@.service
+# enable on boot: systemctl enable camera@username
+# and start it:   systemctl start camera@username
+
+# after editing (ie. changing cli arguments)
+# reload systemd: systemctl daemon-reload
+
+[Unit]
+Description=rPi Camera Service
+After=local-fs.target network.target
+
+[Service]  
+Type=simple
+User=%i
+
+# pass your cli arguments here, eg.
+# .../camera.py --orientation vertical --rotation 0 --interval 240 --start 12 0 --stop 18 45
+
+ExecStart=/usr/bin/env -S "INSTALLDIRECTORY/.venv/bin/python INSTALLDIRECTORY/camera.py PARAMETERS"
+
+Restart=always
+RestartSec=20
+
+
+[Install]
+WantedBy=multi-user.target
